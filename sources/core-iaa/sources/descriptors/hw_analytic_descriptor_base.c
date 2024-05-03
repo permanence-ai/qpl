@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "hw_analytic_descriptor_base.h"
+
 #include "hw_descriptors_api.h"
 #include "own_analytic_descriptor.h"
 

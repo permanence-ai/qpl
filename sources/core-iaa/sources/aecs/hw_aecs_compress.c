@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "hw_aecs_compress.h"
+
 #include <assert.h>
 
 #include "own_hw_definitions.h"

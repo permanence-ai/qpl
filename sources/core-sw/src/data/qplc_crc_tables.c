@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "qplc_crc_tables.h"
+
 /*
  *  Intel® Query Processing Library (Intel® QPL)
  *  SW Core API (Private API)

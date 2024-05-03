@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "qplc_pack_8u.h"
+
 /**
  * @brief Contains implementation of functions for vector packing byte integers to 1...8-bit integers
  * @date 07/06/2020

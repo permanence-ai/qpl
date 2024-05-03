@@ -3,6 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
+
+#include "crc_base.h"
 #include "crc.h"
 
 static const uint16_t crc16tab[256] = {

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "hw_analytic_descriptor_suboperations.h"
+
 #include <stdbool.h>
 #include "hw_descriptors_api.h"
 #include "own_hw_definitions.h"

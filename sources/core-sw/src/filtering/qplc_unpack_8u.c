@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "qplc_unpack_8u.h"
+
 /**
  * @brief Contains implementation of functions for unpacking 1..8-bit data to bytes
  * @date 07/06/2020

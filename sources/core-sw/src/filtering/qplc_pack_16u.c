@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "qplc_pack_16u.h"
+
 /**
  * @brief Contains implementation of functions for vector packing word integers to 9...16-bit integers
  * @date 07/06/2020

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "qplc_unpack_prle.h"
+
 /**
  * @brief Contains implementation of functions for PRLE format unpacking to bytes, words & dwords
  * @date 07/06/2020

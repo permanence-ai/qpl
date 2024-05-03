@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "qplc_pack_32u.h"
+
 /**
  * @brief Contains implementation of functions for vector packing dword integers to 17...32-bit integers
  * @date 07/06/2020

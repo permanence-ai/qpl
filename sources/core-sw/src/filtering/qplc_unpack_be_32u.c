@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "qplc_unpack_be_32u.h"
+
 /**
  * @brief Contains implementation of functions for unpacking 17..32-bit BE data to dwords
  * @date 07/06/2020
