@@ -685,7 +685,7 @@ static void qpl_isal_deflate_int(struct isal_zstream* stream, uint8_t * start_in
         state->tmp_out_start += size;
 
         if (state->tmp_out_start == state->tmp_out_end)
-            state->state -= ZSTATE_TMP_OFFSET;
+            state->state = static_cast<isal_zstate_state>(state->state - ZSTATE_TMP_OFFSET);
 
         if (stream->avail_out == 0 || state->state == ZSTATE_END
             // or do not write out empty blocks since the outbuffer was processed
@@ -730,7 +730,7 @@ static void qpl_isal_deflate_int(struct isal_zstream* stream, uint8_t * start_in
             stream->total_out += size;
             state->tmp_out_start += size;
             if (state->tmp_out_start != state->tmp_out_end)
-                state->state += ZSTATE_TMP_OFFSET;
+                state->state = static_cast<isal_zstate_state>(state->state + ZSTATE_TMP_OFFSET);
 
         }
     }
@@ -1974,7 +1974,7 @@ static void write_header(struct isal_zstream* stream, uint8_t * deflate_hdr,
 
         write_bits(&state->bitbuf, hdr_extra_bits, extra_bits_count);
 
-        state->state = next_state;
+        state->state = static_cast<isal_zstate_state>(next_state);
         state->count = 0;
 
         count = buffer_used(&state->bitbuf);
