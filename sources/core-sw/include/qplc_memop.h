@@ -116,5 +116,21 @@ OWN_QPLC_API(void, qplc_move_32u, (const uint32_t *src_ptr, uint32_t *dst_ptr, u
 }
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+    void px_qplc_set_8u(uint8_t value, uint8_t *dst_ptr, uint32_t length);
+    void px_qplc_set_16u(uint16_t value, uint16_t *dst_ptr, uint32_t length);
+    void px_qplc_set_32u(uint32_t value, uint32_t *dst_ptr, uint32_t length);
+    void px_qplc_copy_8u(const uint8_t *src_ptr, uint8_t *dst_ptr, uint32_t length);
+    void px_qplc_copy_16u(const uint8_t *src_ptr, uint8_t *dst_ptr, uint32_t length);
+    void px_qplc_copy_32u(const uint8_t *src_ptr, uint8_t *dst_ptr, uint32_t length);
+    void px_qplc_zero_8u(uint8_t *dst_ptr, uint32_t length);
+    void px_qplc_move_8u(const uint8_t *src_ptr, uint8_t *dst_ptr, uint32_t length);
+    void px_qplc_move_16u(const uint16_t *src_ptr, uint16_t *dst_ptr, uint32_t length);
+    void px_qplc_move_32u(const uint32_t *src_ptr, uint32_t *dst_ptr, uint32_t length);
+#ifdef __cplusplus
+} // extern "C"
+#endif
 #endif // QPLC_MEMOP_API_H_
 /** @} */

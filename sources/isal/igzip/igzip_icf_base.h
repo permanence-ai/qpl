@@ -16,5 +16,15 @@
 #include "igzip_level_buf_structs.h"
 #include "unaligned.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+    void qpl_isal_deflate_icf_body_hash_hist_base(struct isal_zstream *stream);
+    void qpl_isal_deflate_icf_finish_hash_hist_base(struct isal_zstream *stream);
+    void qpl_isal_deflate_icf_finish_hash_map_base(struct isal_zstream *stream);
+    void qpl_isal_deflate_hash_mad_base(uint16_t *hash_table, uint32_t hash_mask, uint32_t current_index, uint8_t *dict, uint32_t dict_len);
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

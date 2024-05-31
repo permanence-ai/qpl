@@ -31,5 +31,12 @@
 # define bswap_32(x) _byteswap_ulong(x)
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+    int qpl_decode_huffman_code_block_stateless_base(struct inflate_state *state, uint8_t *start_out);
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

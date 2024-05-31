@@ -37,5 +37,14 @@
 # define to_be32(x) _byteswap_ulong(x)
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+    void qpl_isal_deflate_body_huffman_only(struct isal_zstream *stream);
+    void qpl_isal_deflate_finish_huffman_only(struct isal_zstream *stream);
+    void qpl_isal_deflate_hash(struct isal_zstream *stream, uint8_t *dict, uint32_t dict_len);
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

@@ -73,5 +73,13 @@ OWN_QPLC_API(uint64_t, qplc_crc64, (const uint8_t *src_ptr,
 }
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+    uint32_t px_qplc_xor_checksum_8u(const uint8_t *src_ptr, uint32_t length, uint32_t init_xor);
+    uint64_t px_qplc_crc64(const uint8_t *src_ptr, uint32_t length, uint64_t polynomial, uint8_t be_flag, uint8_t inversion_flag);
+#ifdef __cplusplus
+} // extern "C"
+#endif
 #endif // QPLC_CHECKSUM_H_
 /** @} */

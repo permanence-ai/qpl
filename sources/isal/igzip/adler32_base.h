@@ -12,5 +12,12 @@
 #include <stdint.h>
 #include "igzip_checksums.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+    uint32_t qpl_adler32_base(uint32_t adler32, uint8_t *start, uint32_t length);
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif
