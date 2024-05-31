@@ -160,7 +160,7 @@ OWN_QPLC_FUN(qplc_status_t, qplc_unpack_prle_8u, (uint8_t * *pp_src,
             }
             *pp_dst = dst_ptr;
             *pp_src = src_ptr;
-            return status;
+            return QPLC_STS_OK;
         }
         status = QPLC_STS_OK;
     }
