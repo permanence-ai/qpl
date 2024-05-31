@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "hw_crc64_descriptor.h"
+
 #include <assert.h>
 
 #include "own_hw_definitions.h"

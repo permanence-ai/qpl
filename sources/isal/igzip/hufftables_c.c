@@ -3,6 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
+
+#include "hufftables_c.h"
 #include <stdint.h>
 #include <igzip_lib.h>
 

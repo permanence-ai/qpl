@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "crc64_base.h"
+
 #include "crc64.h"
 
 static const uint64_t crc64_ecma_refl_table[256] = {

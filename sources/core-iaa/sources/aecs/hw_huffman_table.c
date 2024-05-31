@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "hw_huffman_table.h"
+
 /**
  * @date 03/23/2020
  * @brief Internal HW API functions for @ref hw_descriptor_compress_init_deflate_base API implementation

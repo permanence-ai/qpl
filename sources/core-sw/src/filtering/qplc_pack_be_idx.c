@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "qplc_pack_be_idx.h"
+
 /**
  * @brief Contains implementation of functions for vector packing byte integers to 1-bit integers or indexes in BE format
  * @date 07/06/2020

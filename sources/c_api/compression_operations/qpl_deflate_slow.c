@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "qpl_deflate_slow.h"
+
 /*
  *  Intel® Query Processing Library (Intel® QPL)
  *  Job API (public C API)

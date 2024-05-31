@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "datatables.h"
+
 #include "own_compress.h"
 
 const uint32_t fixed_literals_table[286] = {

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "bit_rev.h"
+
 /*
  *  Intel® Query Processing Library (Intel® QPL)
  *  Data tables

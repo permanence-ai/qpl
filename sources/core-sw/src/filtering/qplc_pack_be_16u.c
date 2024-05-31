@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "qplc_pack_be_16u.h"
+
 /**
  * @brief Contains implementation of functions for vector packing byte integers to 9...16-bit integers in BE format
  * @date 07/06/2020

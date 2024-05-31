@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include "qpl_hw_get_size.h"
+
 /**
  * @date 3/23/2020
  * @brief @ref hw_get_job_size API implementation
