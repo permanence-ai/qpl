@@ -181,7 +181,7 @@ bool own_load_configuration_functions(void *driver_instance_ptr) {
 
         if (err_message) {
             // @todo this is a workaround to optionally load accfg_device_get_iaa_cap
-            char *iaa_cap_func_name = "accfg_device_get_iaa_cap";
+            const char *iaa_cap_func_name = "accfg_device_get_iaa_cap";
             size_t iaa_cap_func_name_len = strlen(iaa_cap_func_name);
             // @todo this is a workaround to optionally load accfg_wq_get_op_config
             char *op_config_func_name = "accfg_wq_get_op_config";
