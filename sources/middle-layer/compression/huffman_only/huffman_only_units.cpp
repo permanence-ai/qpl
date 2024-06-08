@@ -13,6 +13,7 @@
 #include "bitbuf2.h"
 
 #include "compression/deflate/containers/huffman_table.hpp"
+#include <algorithm>
 
 namespace qpl::ml::compression {
 
@@ -175,10 +176,8 @@ auto huffman_only_create_huffman_table(huffman_only_state<execution_path_t::soft
         // Manually creating histogram since no need for dist histogram in huffman only compression
         // ISAL routine fills in dist histogram which results in unoptimal compression for huffman only
 
-        for (uint32_t i = 0; i < stream.isal_stream_ptr_->avail_in; i++) {
-            histogram->lit_len_histogram[stream.isal_stream_ptr_->next_in[i]]++;
-        }
-
+        std::for_each(stream.isal_stream_ptr_->next_in, stream.isal_stream_ptr_->next_in + stream.isal_stream_ptr_->avail_in, 
+              [&](auto c) { histogram->lit_len_histogram[c]++; });
         qpl_isal_create_hufftables(stream.isal_stream_ptr_->hufftables, histogram);
     }
 
@@ -195,9 +194,7 @@ auto convert_output_to_big_endian(huffman_only_state<execution_path_t::software>
                                                                 stream.isal_stream_ptr_->total_out);
 
     // Main cycle
-    for (uint32_t i = 0; i < actual_length; i++) {
-        array_ptr[i] = reverse_bits(array_ptr[i], 16);
-    }
+    std::transform(array_ptr, array_ptr + actual_length, array_ptr, [](auto x) { return reverse_bits(x, 16); });
 
     // Check if the last byte should be bit reversed (in case of odd stream length)
     if (stream.isal_stream_ptr_->total_out % 2 == 1) {
