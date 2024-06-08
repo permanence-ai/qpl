@@ -172,9 +172,7 @@ static inline void create_packed_offset_table(uint32_t *const packed_table_ptr,
 static inline void fill_histogram(const uint32_t *literals_lengths_histogram_ptr,
                                   const uint32_t *distances_histogram_ptr,
                                   isal_huff_histogram *histogram) {
-    for (uint32_t i = 0U; i < QPLC_DEFLATE_LL_TABLE_SIZE; i++) {
-        histogram->lit_len_histogram[i] = static_cast<uint32_t>(literals_lengths_histogram_ptr[i]);
-    }
+    std::copy(literals_lengths_histogram_ptr, literals_lengths_histogram_ptr + QPLC_DEFLATE_LL_TABLE_SIZE, histogram->lit_len_histogram);
 
     for (uint32_t i = 0U; i < QPLC_DEFLATE_D_TABLE_SIZE; i++) {
         histogram->dist_histogram[i] = static_cast<uint32_t>(distances_histogram_ptr[i]);

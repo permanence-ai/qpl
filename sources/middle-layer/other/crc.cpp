@@ -9,6 +9,7 @@
 #include "util/descriptor_processing.hpp"
 
 #include "hw_descriptors_api.h"
+#include <algorithm>
 
 namespace qpl::ml::other {
 
@@ -146,10 +147,9 @@ auto perform_crc(const uint8_t *src_ptr,
     crc64_init_table(table, polynomial, is_be_bit_order);
     auto crc = crc64_init_crc(polynomial, is_be_bit_order, is_inverse);
 
-    for (uint32_t i = 0; i < length; i++) {
-        crc = crc64_update(src_ptr[i], table, crc, is_be_bit_order);
-    }
-
+    std::for_each(src_ptr, src_ptr + length, [&](auto byte) {
+            crc = crc64_update(byte, table, crc, is_be_bit_order);
+    });
     return crc64_finalize(crc, polynomial, is_be_bit_order, is_inverse);
 }
 

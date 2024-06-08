@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
-#include "algorithm"
+#include <algorithm>
 
 #if defined( __linux__ )
 
@@ -256,11 +256,7 @@ auto hw_device::initialize_new_device(descriptor_t *device_descriptor_ptr) noexc
     // Logic for op_cfg_enabled_ value
     op_cfg_enabled_ = working_queues_[0].get_op_configuration_support();
 
-    for (uint32_t wq_idx = 0; wq_idx < queue_count_; wq_idx++) {
-        for (uint32_t register_index = 0 ; register_index < TOTAL_OP_CFG_BIT_GROUPS; register_index++) {
-            op_configs_[wq_idx] = working_queues_[wq_idx].get_op_config_register();
-        }
-    }
+    std::fill_n(op_configs_.begin(), queue_count_, working_queues_[0].get_op_config_register());
 
 
     return HW_ACCELERATOR_STATUS_OK;

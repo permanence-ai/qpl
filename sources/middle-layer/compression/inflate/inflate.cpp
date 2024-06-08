@@ -16,6 +16,7 @@
 
 #include "simple_memory_ops.hpp"
 #include "util/descriptor_processing.hpp"
+#include <algorithm>
 
 namespace qpl::ml::compression {
 
@@ -441,11 +442,7 @@ static void handle_internal_buffers_overflow(isal_inflate_state &inflate_state) 
         auto lookback_ptr = (&inflate_state.tmp_out_buffer[inflate_state.tmp_out_valid]) -
                             inflate_state.copy_overflow_distance;
 
-        for (int32_t i = 0U; i < inflate_state.copy_overflow_length; i++) {
-            *current_out_ptr = *lookback_ptr;
-            current_out_ptr++;
-            lookback_ptr++;
-        }
+        std::copy_n(lookback_ptr, inflate_state.copy_overflow_length, current_out_ptr);
 
         inflate_state.tmp_out_valid += inflate_state.copy_overflow_length;
         inflate_state.total_out += inflate_state.copy_overflow_length;
