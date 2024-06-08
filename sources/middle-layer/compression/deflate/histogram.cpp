@@ -16,6 +16,7 @@
 #include "deflate_hash_table.h"
 #include "dispatcher.hpp"
 #include "simple_memory_ops.hpp"
+#include <algorithm>
 
 namespace qpl::ml::compression {
 
@@ -27,21 +28,15 @@ void histogram_join_another(qpl_histogram &first_histogram_ptr,
     auto *first_ptr  = reinterpret_cast<uint32_t *>(&first_histogram_ptr);
     auto *second_ptr = reinterpret_cast<uint32_t *>(&second_histogram_ptr);
 
-    for (uint32_t i = 0; i < histogram_notes; i++) {
-        first_ptr[i] += second_ptr[i];
-    }
+    std::transform(first_ptr, first_ptr + histogram_notes, second_ptr, first_ptr, std::plus<>());
 }
 
 static inline void isal_histogram_set_statistics(isal_histogram *isal_histogram_ptr,
                                                  const uint32_t *literal_length_histogram_ptr,
                                                  const uint32_t *offsets_histogram_ptr) {
-    for (uint32_t i = 0U; i < QPLC_DEFLATE_LL_TABLE_SIZE; i++) {
-        isal_histogram_ptr->lit_len_histogram[i] = literal_length_histogram_ptr[i];
-    }
+    std::copy_n(literal_length_histogram_ptr, QPLC_DEFLATE_LL_TABLE_SIZE, isal_histogram_ptr->lit_len_histogram);
 
-    for (uint32_t i = 0; i < QPLC_DEFLATE_D_TABLE_SIZE; i++) {
-        isal_histogram_ptr->dist_histogram[i] = offsets_histogram_ptr[i];
-    }
+    std::copy(offsets_histogram_ptr, offsets_histogram_ptr + QPLC_DEFLATE_D_TABLE_SIZE, isal_histogram_ptr->dist_histogram);
 }
 
 static inline void isal_histogram_get_statistics(const isal_histogram *isal_histogram_ptr,
