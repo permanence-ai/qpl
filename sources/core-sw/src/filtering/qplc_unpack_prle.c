@@ -123,7 +123,7 @@ OWN_QPLC_FUN(qplc_status_t, qplc_unpack_prle_8u, (uint8_t * *pp_src,
     uint8_t  *src_ptr      = (uint8_t *) *pp_src;
     uint8_t  *src_stop_ptr = src_ptr + src_length;
     uint8_t  *dst_stop_ptr = dst_ptr + dst_length;
-    qplc_status_t status    = QPLC_STS_OK;  // Changed type to qplc_status_t
+    qplc_status_t status   = QPLC_STS_OK;
 
     if (0 < *count_ptr) {
         count = OWN_MIN((uint32_t) *count_ptr, dst_length);
@@ -239,7 +239,7 @@ OWN_QPLC_FUN(qplc_status_t, qplc_unpack_prle_16u, (uint8_t * *pp_src,
     uint8_t  *kept_src_ptr = NULL;
     uint32_t src_step      = 0U;
     uint32_t dst_step      = 0U;
-    qplc_status_t status    = QPLC_STS_OK; // changed type from uint32_t to qplc_status_t
+    qplc_status_t status   = QPLC_STS_OK;
 
     if (0 < *count_ptr) {
         count = QPL_MIN((uint32_t) *count_ptr, dst_length / sizeof(uint16_t));
