@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 #include <array>
+#include <algorithm>
 
 #include "gtest/gtest.h"
 #include "qpl_test_environment.hpp"
@@ -30,17 +31,14 @@ static void fill_src_buffer_32u(uint8_t* src, uint8_t* dst, uint32_t length, uin
     uint32_t* p_src_32u = (uint32_t*)src;
     uint32_t* p_dst_32u = (uint32_t*)dst;
     const uint32_t mask = (1U << nbits) - 1U;
-    for (uint32_t indx = 0; indx < length; indx++) {
-        p_dst_32u[indx] = p_src_32u[indx] & mask;
-    }
+    std::transform(p_src_32u, p_src_32u + length, p_dst_32u,
+               [mask](auto x) { return x & mask; });
 }
 
 static void fill_reference_buffer_32u(uint8_t* src, uint8_t* dst, uint32_t length) {
     uint32_t* p_src_32u = (uint32_t*)src;
     uint32_t* p_dst_32u = (uint32_t*)dst;
-    for (uint32_t indx = 0; indx < length; indx++) {
-        p_dst_32u[indx] = p_src_32u[indx];
-    }
+    std::copy_n(p_src_32u, length, p_dst_32u);
 }
 
 constexpr uint32_t TEST_BUFFER_SIZE = 64U;

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 #include <array>
+#include <algorithm>
 
 #include "gtest/gtest.h"
 #include "qpl_test_environment.hpp"
@@ -137,9 +138,7 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_bit_aggregates_8u, base) {
 
     {
         uint8_t* p_source_8u = (uint8_t*)source.data();
-        for (uint32_t indx = 0U; indx < TEST_BUFFER_SIZE; indx++) {
-            p_source_8u[indx] = 0U;
-        }
+        std::fill_n(p_source_8u, TEST_BUFFER_SIZE, 0U);
     }
 
     for (uint32_t length = 1U; length <= TEST_BUFFER_SIZE; length++) {
@@ -273,9 +272,7 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_aggregates_8u, base) {
 
     {
         uint8_t* p_source_8u = (uint8_t*)source.data();
-        for (uint32_t indx = 0U; indx < TEST_BUFFER_SIZE; indx++) {
-            p_source_8u[indx] = 0U;
-        }
+        std::fill_n(p_source_8u, TEST_BUFFER_SIZE, 0U);
     }
 
     for (uint32_t length = 1U; length <= TEST_BUFFER_SIZE; length++) {

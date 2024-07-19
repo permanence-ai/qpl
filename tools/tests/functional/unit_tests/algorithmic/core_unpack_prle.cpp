@@ -56,40 +56,28 @@ qplc_unpack_prle_t_ptr qplc_unpack_prle(uint32_t index) {
 }
 
 static void ref_qplc_set_8u(uint8_t value, uint8_t* p_dst, uint32_t length) {
-    for (uint32_t indx = 0U; indx < length; indx++) {
-        p_dst[indx] = value;
-    }
+    std::fill_n(p_dst, length, value);
 }
 
 static void ref_qplc_set_16u(uint16_t value, uint16_t* p_dst, uint32_t length) {
-    for (uint32_t indx = 0U; indx < length; indx++) {
-        p_dst[indx] = value;
-    }
+    std::fill_n(p_dst, length, value);
 }
 
 static void ref_qplc_set_32u(uint32_t value, uint32_t* p_dst, uint32_t length) {
-    for (uint32_t indx = 0U; indx < length; indx++) {
-        p_dst[indx] = value;
-    }
+    std::fill_n(p_dst, length, value);
 }
 
 
 static void ref_qplc_copy_8u(const uint8_t* p_src, uint8_t* p_dst, uint32_t length) {
-    for (uint32_t indx = 0U; indx < length; indx++) {
-        p_dst[indx] = p_src[indx];
-    }
+    std::copy_n(p_src, length, p_dst);
 }
 
 static void ref_qplc_copy_16u(const uint16_t* p_src, uint16_t* p_dst, uint32_t length) {
-    for (uint32_t indx = 0U; indx < length; indx++) {
-        p_dst[indx] = p_src[indx];
-    }
+    std::copy_n(p_src, length, p_dst);
 }
 
 static void ref_qplc_copy_32u(const uint32_t* p_src, uint32_t* p_dst, uint32_t length) {
-    for (uint32_t indx = 0U; indx < length; indx++) {
-        p_dst[indx] = p_src[indx];
-    }
+    std::copy_n(p_src, length, p_dst);
 }
 
 
@@ -531,11 +519,9 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_unpack_prle_8u, base) {
         uint8_t* p_source_8u = (uint8_t*)source.data();
         uint32_t* p_value_32u = (uint32_t*)value.data();
         uint32_t* p_ref_value_32u = (uint32_t*)ref_value.data();
-        for (uint32_t indx = 0U; indx < TEST_BUFFER_SIZE; indx++) {
-            p_source_8u[indx] = 1U;
-            p_value_32u[indx] = 1U;
-            p_ref_value_32u[indx] = 1U;
-        }
+        std::fill_n(p_source_8u, TEST_BUFFER_SIZE, 1U);
+        std::fill_n(p_value_32u, TEST_BUFFER_SIZE, 1U);
+        std::fill_n(p_ref_value_32u, TEST_BUFFER_SIZE, 1U);
     }
     for (uint32_t bit_width = 7U; bit_width <= 8U; bit_width++) {
         for (uint32_t length = 1U; length <= TEST_BUFFER_SIZE; length++) {
@@ -573,11 +559,9 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_unpack_prle_8u, base) {
         uint8_t* p_source_8u = (uint8_t*)source.data();
         uint32_t* p_value_32u = (uint32_t*)value.data();
         uint32_t* p_ref_value_32u = (uint32_t*)ref_value.data();
-        for (uint32_t indx = 0U; indx < TEST_BUFFER_SIZE; indx++) {
-            p_source_8u[indx] = 0x8FU;
-            p_value_32u[indx] = 0x8FU;
-            p_ref_value_32u[indx] = 0x8FU;
-        }
+        std::fill_n(p_source_8u, TEST_BUFFER_SIZE, 0x8FU);
+        std::fill_n(p_value_32u, TEST_BUFFER_SIZE, 0x8FU);
+        std::fill_n(p_ref_value_32u, TEST_BUFFER_SIZE, 0x8FU);
     }
     for (uint32_t bit_width = 7U; bit_width <= 8U; bit_width++) {
         for (uint32_t length = 1U; length <= TEST_BUFFER_SIZE; length++) {
@@ -625,11 +609,9 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_unpack_prle_16u, base) {
         uint16_t* p_source_16u = (uint16_t*)source.data();
         uint32_t* p_value_32u = (uint32_t*)value.data();
         uint32_t* p_ref_value_32u = (uint32_t*)ref_value.data();
-        for (uint32_t indx = 0U; indx < TEST_BUFFER_SIZE; indx++) {
-            p_source_16u[indx] = 1U;
-            p_value_32u[indx] = 1U;
-            p_ref_value_32u[indx] = 1U;
-        }
+        std::fill_n(p_source_16u, TEST_BUFFER_SIZE, 1U);
+        std::fill_n(p_value_32u, TEST_BUFFER_SIZE, 1U);
+        std::fill_n(p_ref_value_32u, TEST_BUFFER_SIZE, 1U);
     }
     for (uint32_t bit_width = 15U; bit_width <= 16U; bit_width++) {
         for (uint32_t length = 1U; length <= TEST_BUFFER_SIZE; length++) {
@@ -667,11 +649,9 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_unpack_prle_16u, base) {
         uint16_t* p_source_16u = (uint16_t*)source.data();
         uint32_t* p_value_32u = (uint32_t*)value.data();
         uint32_t* p_ref_value_32u = (uint32_t*)ref_value.data();
-        for (uint32_t indx = 0U; indx < TEST_BUFFER_SIZE; indx++) {
-            p_source_16u[indx] = 0x8FU;
-            p_value_32u[indx] = 0x8FU;
-            p_ref_value_32u[indx] = 0x8FU;
-        }
+        std::fill_n(p_source_16u, TEST_BUFFER_SIZE, 0x8FU);
+        std::fill_n(p_value_32u, TEST_BUFFER_SIZE, 0x8FU);
+        std::fill_n(p_ref_value_32u, TEST_BUFFER_SIZE, 0x8FU);
     }
     for (uint32_t bit_width = 15U; bit_width <= 16U; bit_width++) {
         for (uint32_t length = 1U; length <= TEST_BUFFER_SIZE; length++) {
@@ -720,11 +700,9 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_unpack_prle_32u, base) {
         uint32_t* p_source_32u = (uint32_t*)source.data();
         uint32_t* p_value_32u = (uint32_t*)value.data();
         uint32_t* p_ref_value_32u = (uint32_t*)ref_value.data();
-        for (uint32_t indx = 0U; indx < TEST_BUFFER_SIZE; indx++) {
-            p_source_32u[indx] = 1U;
-            p_value_32u[indx] = 1U;
-            p_ref_value_32u[indx] = 1U;
-        }
+        std::fill_n(p_source_32u, TEST_BUFFER_SIZE, 1U);
+        std::fill_n(p_value_32u, TEST_BUFFER_SIZE, 1U);
+        std::fill_n(p_ref_value_32u, TEST_BUFFER_SIZE, 1U);
     }
     for (uint32_t indx_bit_width = 0U; indx_bit_width < 3U; indx_bit_width++) {
         const uint32_t bit_width = p_bit_witdh[indx_bit_width];
@@ -763,11 +741,9 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_unpack_prle_32u, base) {
         uint32_t* p_source_32u = (uint32_t*)source.data();
         uint32_t* p_value_32u = (uint32_t*)value.data();
         uint32_t* p_ref_value_32u = (uint32_t*)ref_value.data();
-        for (uint32_t indx = 0U; indx < TEST_BUFFER_SIZE; indx++) {
-            p_source_32u[indx] = 0x8FU;
-            p_value_32u[indx] = 0x8FU;
-            p_ref_value_32u[indx] = 0x8FU;
-        }
+        std::fill_n(p_source_32u, TEST_BUFFER_SIZE, 0x8FU);
+        std::fill_n(p_value_32u, TEST_BUFFER_SIZE, 0x8FU);
+        std::fill_n(p_ref_value_32u, TEST_BUFFER_SIZE, 0x8FU);
     }
     for (uint32_t indx_bit_width = 0U; indx_bit_width < 3U; indx_bit_width++) {
         const uint32_t bit_width = p_bit_witdh[indx_bit_width];

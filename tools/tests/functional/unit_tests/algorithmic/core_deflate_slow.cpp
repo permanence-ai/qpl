@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 #include <array>
+#include <algorithm>
 
 #include "gtest/gtest.h"
 
@@ -52,24 +53,16 @@ static inline qplc_slow_deflate_icf_body_t_ptr qplc_slow_deflate_icf_body() {
 
 static void init_hash_table(void)
 {
-    for (uint32_t indx = 0U; indx < D_SIZE_HASH_TABLE; indx++) {
-        hash_table[indx] = 0x80000000U;
-    }
-    for (uint32_t indx = 0U; indx < D_SIZE_HASH_STORE; indx++) {
-        hash_story[indx] = 0x00000000U;
-    }
+    std::fill_n(hash_table, D_SIZE_HASH_TABLE, 0x80000000U);
+    std::fill(std::begin(hash_story), std::end(hash_story), 0x00000000U);
 }
 
 static void init_histogram(isal_mod_hist *str_histogram_ptr)
 {
     uint32_t* d_hist = str_histogram_ptr->d_hist;
     uint32_t* ll_hist = str_histogram_ptr->ll_hist;
-    for (uint32_t indx = 0U; indx < 0x1e; indx++) {
-        d_hist[indx] = 0U;
-    }
-    for (uint32_t indx = 0U; indx < 0x201; indx++) {
-        ll_hist[indx] = 0U;
-    }
+    std::fill_n(d_hist, 0x1e, 0U);
+    std::fill_n(ll_hist, 0x201, 0U);
 }
 
 static void init_deflate_icf(void)
