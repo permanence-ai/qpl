@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 #include <array>
+#include <algorithm>
 
 #include "gtest/gtest.h"
 #include "qpl_test_environment.hpp"
@@ -24,22 +25,19 @@ qplc_expand_t_ptr qplc_expand(uint32_t index) {
 static void fill_buffer_8u(uint8_t* src, uint8_t* dst, uint32_t length) {
     uint8_t* p_src_8u = src;
     uint8_t* p_dst_8u = dst;
-    for (uint32_t indx = 0U; indx < length; indx++)
-        p_dst_8u[indx] = p_src_8u[indx];
+    std::copy_n(p_src_8u, length, p_dst_8u);
 }
 
 static void fill_buffer_16u(uint8_t* src, uint8_t* dst, uint32_t length) {
     uint16_t* p_src_16u = (uint16_t*)src;
     uint16_t* p_dst_16u = (uint16_t*)dst;
-    for (uint32_t indx = 0U; indx < length; indx++)
-        p_dst_16u[indx] = p_src_16u[indx];
+    std::copy_n(p_src_16u, length, p_dst_16u);
 }
 
 static void fill_buffer_32u(uint8_t* src, uint8_t* dst, uint32_t length) {
     uint32_t* p_src_32u = (uint32_t*)src;
     uint32_t* p_dst_32u = (uint32_t*)dst;
-    for (uint32_t indx = 0U; indx < length; indx++)
-        p_dst_32u[indx] = p_src_32u[indx];
+    std::copy_n(p_src_32u, length, p_dst_32u);
 }
 
 
@@ -156,9 +154,7 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_expand_8u, base) {
 
     {
         uint8_t* p_buffer_mask = (uint8_t*)mask.data();
-        for (uint32_t indx = 0U; indx < 16U; indx++) {
-            p_buffer_mask[indx] = 0U;
-        }
+        std::fill_n(p_buffer_mask, 16, 0U);
     }
 
     for (uint32_t length = 16U; length <= TEST_BUFFER_SIZE; length++) {
@@ -194,9 +190,7 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_expand_8u, base) {
 
     {
         uint8_t* p_buffer_mask = (uint8_t*)mask.data();
-        for (uint32_t indx = 0U; indx < 32U; indx++) {
-            p_buffer_mask[indx] = 0U;
-        }
+        std::fill_n(p_buffer_mask, 32, 0U);
     }
 
     for (uint32_t length = 33U; length <= TEST_BUFFER_SIZE; length++) {
@@ -215,9 +209,7 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_expand_8u, base) {
 
     {
         uint8_t* p_buffer_mask = (uint8_t*)mask.data();
-        for (uint32_t indx = 0U; indx < 32U; indx++) {
-            p_buffer_mask[indx] = 1U;
-        }
+        std::fill_n(p_buffer_mask, 32, 1U);
     }
 
     for (uint32_t length = 33U; length <= TEST_BUFFER_SIZE; length++) {
@@ -275,9 +267,7 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_expand_16u, base) {
 
     {
         uint8_t* p_buffer_mask = (uint8_t*)mask.data();
-        for (uint32_t indx = 0U; indx < 16U; indx++) {
-            p_buffer_mask[indx] = 0U;
-        }
+        std::fill_n(p_buffer_mask, 16, 0U);
     }
 
     for (uint32_t length = 16U; length <= TEST_BUFFER_SIZE; length++) {
@@ -313,9 +303,7 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_expand_16u, base) {
 
     {
         uint8_t* p_buffer_mask = (uint8_t*)mask.data();
-        for (uint32_t indx = 0U; indx < 32U; indx++) {
-            p_buffer_mask[indx] = 0U;
-        }
+        std::fill_n(p_buffer_mask, 32, 0U);
     }
 
     for (uint32_t length = 33U; length <= TEST_BUFFER_SIZE; length++) {
@@ -334,9 +322,7 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_expand_16u, base) {
 
     {
         uint8_t* p_buffer_mask = (uint8_t*)mask.data();
-        for (uint32_t indx = 0U; indx < 32U; indx++) {
-            p_buffer_mask[indx] = 1U;
-        }
+        std::fill_n(p_buffer_mask, 32, 1U);
     }
 
     for (uint32_t length = 33U; length <= TEST_BUFFER_SIZE; length++) {
@@ -393,9 +379,7 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_expand_32u, base) {
 
     {
         uint8_t* p_buffer_mask = (uint8_t*)mask.data();
-        for (uint32_t indx = 0U; indx < 16U; indx++) {
-            p_buffer_mask[indx] = 0U;
-        }
+        std::fill_n(p_buffer_mask, 16, 0U);
     }
 
     for (uint32_t length = 16U; length <= TEST_BUFFER_SIZE; length++) {
@@ -431,9 +415,7 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_expand_32u, base) {
 
     {
         uint8_t* p_buffer_mask = (uint8_t*)mask.data();
-        for (uint32_t indx = 0U; indx < 32U; indx++) {
-            p_buffer_mask[indx] = 0U;
-        }
+        std::fill_n(p_buffer_mask, 32, 0U);
     }
 
     for (uint32_t length = 33U; length <= TEST_BUFFER_SIZE; length++) {
@@ -452,9 +434,7 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_expand_32u, base) {
 
     {
         uint8_t* p_buffer_mask = (uint8_t*)mask.data();
-        for (uint32_t indx = 0U; indx < 32U; indx++) {
-            p_buffer_mask[indx] = 1U;
-        }
+        std::fill_n(p_buffer_mask, 32, 1U);
     }
 
     for (uint32_t length = 33U; length <= TEST_BUFFER_SIZE; length++) {
