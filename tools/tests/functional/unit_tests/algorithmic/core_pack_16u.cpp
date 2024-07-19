@@ -103,8 +103,8 @@ static void fill_src_buffer_16u(uint8_t* src, uint8_t* dst, size_t length, uint3
     uint16_t *p_src_16u = (uint16_t*)src;
     uint16_t *p_dst_16u = (uint16_t*)dst;
     const uint16_t mask = (1U << nbits) - 1U;
-    for (uint32_t indx = 0; indx < length; indx++)
-        p_dst_16u[indx] = p_src_16u[indx] & mask;
+    std::transform(p_src_16u, p_src_16u + length, p_dst_16u,
+               [&mask](auto x) { return x & mask; });
 }
 
 constexpr uint32_t TEST_BUFFER_SIZE = 64U;

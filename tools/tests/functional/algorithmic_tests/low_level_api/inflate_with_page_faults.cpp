@@ -1,3 +1,4 @@
+#include <algorithm>
 /*******************************************************************************
  * Copyright (C) 2023 Intel Corporation
  *
@@ -62,9 +63,7 @@ protected:
         }
 
         qpl::test::random random_element_generator(0, 1, GetSeed());
-        for (size_t i = 0U; i < src_size; i++) {
-            aligned_src_buffer[i] = (uint8_t) random_element_generator;
-        }
+        std::fill_n(aligned_src_buffer, src_size, (uint8_t) random_element_generator);
         std::memset(aligned_dst_buffer, 0, dst_size);
         std::memset(aligned_ref_buffer, 0, src_size);
 
