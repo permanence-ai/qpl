@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 #include <array>
+#include <algorithm>
 
 #include "gtest/gtest.h"
 #include "qpl_test_environment.hpp"
@@ -28,9 +29,7 @@ qplc_select_i_t_ptr qplc_select_i(uint32_t index) {
 static void fill_buffer_8u(uint8_t* src, uint8_t* dst, uint32_t length) {
     uint8_t* p_src_8u = src;
     uint8_t* p_dst_8u = dst;
-    for (uint32_t indx = 0U; indx < length; indx++) {
-        p_dst_8u[indx] = p_src_8u[indx];
-    }
+    std::copy_n(p_src_8u, length, p_dst_8u);
 }
 
 static uint32_t ref_qplc_select_8u(const uint8_t* src_ptr,
@@ -40,11 +39,7 @@ static uint32_t ref_qplc_select_8u(const uint8_t* src_ptr,
 {
     uint32_t selected = 0U;
 
-    for (uint32_t idx = 0U; idx < length; idx++) {
-        if (src2_ptr[idx] != 0U) {
-            dst_ptr[selected++] = src_ptr[idx];
-        }
-    }
+    std::copy_if(src_ptr, src_ptr + length, dst_ptr, [src2_ptr](auto x) { return src2_ptr[--x] != 0U; });
     return selected;
 }
 
