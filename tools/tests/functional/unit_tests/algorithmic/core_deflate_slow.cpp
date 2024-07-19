@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 #include <array>
+#include <algorithm>
 
 #include "gtest/gtest.h"
 
@@ -52,33 +53,21 @@ static inline qplc_slow_deflate_icf_body_t_ptr qplc_slow_deflate_icf_body() {
 
 static void init_hash_table(void)
 {
-    for (uint32_t indx = 0U; indx < D_SIZE_HASH_TABLE; indx++) {
-        hash_table[indx] = 0x80000000U;
-    }
-    for (uint32_t indx = 0U; indx < D_SIZE_HASH_STORE; indx++) {
-        hash_story[indx] = 0x00000000U;
-    }
+    std::fill_n(hash_table, D_SIZE_HASH_TABLE, 0x80000000U);
+    std::fill_n(hash_story, D_SIZE_HASH_STORE, 0x00000000U);
 }
 
 static void init_histogram(isal_mod_hist *str_histogram_ptr)
 {
     uint32_t* d_hist = str_histogram_ptr->d_hist;
     uint32_t* ll_hist = str_histogram_ptr->ll_hist;
-    for (uint32_t indx = 0U; indx < 0x1e; indx++) {
-        d_hist[indx] = 0U;
-    }
-    for (uint32_t indx = 0U; indx < 0x201; indx++) {
-        ll_hist[indx] = 0U;
-    }
+    std::fill_n(d_hist, 0x1e, 0U);
+    std::fill_n(ll_hist, 0x201, 0U);
 }
 
 static void init_deflate_icf(void)
 {
-    for (uint32_t indx = 0U; indx < D_SIZE_DEFLATE_ICF; indx++) {
-        p_deflate_icf[indx].lit_len = 0;
-        p_deflate_icf[indx].lit_dist = 0;
-        p_deflate_icf[indx].dist_extra = 0;
-    }
+    std::fill_n(p_deflate_icf, D_SIZE_DEFLATE_ICF, deflate_icf{0, 0, 0});
 }
 
 static void init_icf_stream(deflate_icf_stream* icf_stream_ptr)
@@ -142,15 +131,11 @@ static uint32_t test_histogram(isal_mod_hist* str_histogram, isal_mod_hist* str_
     uint32_t* d_hist_ref = str_histogram_ref->d_hist;
     uint32_t* ll_hist_ref = str_histogram_ref->ll_hist;
 
-    for (uint32_t indx = 0U; indx < 0x1e; indx++) {
-        if (d_hist[indx] != d_hist_ref[indx]) {
-            return 1U;
-        }
+    if (!std::equal(d_hist, d_hist + 0x1e, d_hist_ref)) {
+    return 1U;
     }
-    for (uint32_t indx = 0U; indx < 0x201; indx++) {
-        if (ll_hist[indx] != ll_hist_ref[indx]) {
-            return 1U;
-        }
+    if (!std::equal(ll_hist, ll_hist + 0x201, ll_hist_ref)) {
+    return 1U;
     }
     return 0U;
 }
@@ -236,10 +221,8 @@ QPL_UNIT_API_ALGORITHMIC_TEST(qplc_deflate_slow_icf, base) {
     {
         uint8_t* p_source_buf = (uint8_t*)source.data();
         uint8_t* p_destination_buf = (uint8_t*)destination.data();
-        for (uint32_t indx = 0U; indx < source.size(); indx++) {
-            p_source_buf[indx] = (uint8_t)0x5A;
-            p_destination_buf[indx] = (uint8_t)0x00;
-        }
+        std::fill_n(p_source_buf, source.size(), (uint8_t)0x5A);
+        std::fill_n(p_destination_buf, source.size(), (uint8_t)0x00);
     }
 
     icf_stream.end_ptr = (deflate_icf*)((uint32_t*)p_deflate_icf + 0x10);
