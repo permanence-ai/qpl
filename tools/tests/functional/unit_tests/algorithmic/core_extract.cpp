@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 #include <array>
+#include <algorithm>
 #include <vector>
 #include "gtest/gtest.h"
 
@@ -30,9 +31,7 @@ qplc_extract_i_t_ptr qplc_extract_i(uint32_t index) {
 static void fill_buffer_8u(uint8_t* src, uint8_t* dst, uint32_t length) {
     uint8_t* p_src_8u = src;
     uint8_t* p_dst_8u = dst;
-    for (uint32_t indx = 0U; indx < length; indx++) {
-        p_dst_8u[indx] = p_src_8u[indx];
-    }
+    std::copy_n(p_src_8u, length, p_dst_8u);
 }
 
 static uint32_t ref_qplc_extract_8u(const uint8_t* src_ptr,
@@ -55,9 +54,7 @@ static uint32_t ref_qplc_extract_8u(const uint8_t* src_ptr,
     const uint32_t stop = ((*index_ptr + length) > high_value) ? (high_value + 1U - *index_ptr) : length;
 
     src_ptr += start;
-    for (uint32_t idx = 0U; idx < (stop - start); idx++) {
-        dst_ptr[idx] = src_ptr[idx];
-    }
+    std::copy(src_ptr, src_ptr + (stop - start), dst_ptr);
     *index_ptr += length;
     return (stop - start);
 }
@@ -84,9 +81,7 @@ static uint32_t ref_qplc_extract_16u(const uint8_t* src_ptr,
     const uint32_t stop = ((*index_ptr + length) > high_value) ? (high_value + 1U - *index_ptr) : length;
 
     src_16u_ptr += start;
-    for (uint32_t idx = 0U; idx < (stop - start); idx++) {
-        dst_16u_ptr[idx] = src_16u_ptr[idx];
-    }
+    std::copy_n(src_16u_ptr, stop - start, dst_16u_ptr);
     *index_ptr += length;
     return (stop - start);
 }
@@ -113,9 +108,7 @@ static uint32_t ref_qplc_extract_32u(const uint8_t* src_ptr,
     const uint32_t stop = ((*index_ptr + length) > high_value) ? (high_value + 1U - *index_ptr) : length;
 
     src_32u_ptr += start;
-    for (uint32_t idx = 0U; idx < (stop - start); idx++) {
-        dst_32u_ptr[idx] = src_32u_ptr[idx];
-    }
+    std::copy_n(src_32u_ptr, stop - start, dst_32u_ptr);
     *index_ptr += length;
     return (stop - start);
 }
