@@ -7,6 +7,8 @@
 // ml
 #include "compression/deflate/histogram.hpp"
 
+#include <algorithm>
+
 #include "util/descriptor_processing.hpp"
 
 // qpl_c_api
@@ -27,33 +29,24 @@ void histogram_join_another(qpl_histogram& first_histogram_ptr, qpl_histogram& s
     auto* first_ptr  = reinterpret_cast<uint32_t*>(&first_histogram_ptr);
     auto* second_ptr = reinterpret_cast<uint32_t*>(&second_histogram_ptr);
 
-    for (uint32_t i = 0; i < histogram_notes; i++) {
-        first_ptr[i] += second_ptr[i];
-    }
+    std::transform(first_ptr, first_ptr + histogram_notes, second_ptr, first_ptr, std::plus<> {});
 }
 
 static inline void isal_histogram_set_statistics(isal_histogram* isal_histogram_ptr,
                                                  const uint32_t* literal_length_histogram_ptr,
                                                  const uint32_t* offsets_histogram_ptr) {
-    for (uint32_t i = 0U; i < QPLC_DEFLATE_LL_TABLE_SIZE; i++) {
-        isal_histogram_ptr->lit_len_histogram[i] = literal_length_histogram_ptr[i];
-    }
+    std::copy_n(literal_length_histogram_ptr, QPLC_DEFLATE_LL_TABLE_SIZE, isal_histogram_ptr->lit_len_histogram);
 
-    for (uint32_t i = 0; i < QPLC_DEFLATE_D_TABLE_SIZE; i++) {
-        isal_histogram_ptr->dist_histogram[i] = offsets_histogram_ptr[i];
-    }
+    std::copy_n(offsets_histogram_ptr, QPLC_DEFLATE_D_TABLE_SIZE, isal_histogram_ptr->dist_histogram);
 }
 
 static inline void isal_histogram_get_statistics(const isal_histogram* isal_histogram_ptr,
                                                  uint32_t*             literal_length_histogram_ptr,
                                                  uint32_t*             offsets_histogram_ptr) {
-    for (uint32_t i = 0U; i < QPLC_DEFLATE_LL_TABLE_SIZE; i++) {
-        literal_length_histogram_ptr[i] = (uint32_t)isal_histogram_ptr->lit_len_histogram[i];
-    }
+    std::copy_n(isal_histogram_ptr->lit_len_histogram, QPLC_DEFLATE_LL_TABLE_SIZE, literal_length_histogram_ptr);
 
-    for (uint32_t i = 0U; i < QPLC_DEFLATE_D_TABLE_SIZE; i++) {
-        offsets_histogram_ptr[i] = (uint32_t)isal_histogram_ptr->dist_histogram[i];
-    }
+    std::copy(std::begin(isal_histogram_ptr->dist_histogram),
+              std::begin(isal_histogram_ptr->dist_histogram) + QPLC_DEFLATE_D_TABLE_SIZE, offsets_histogram_ptr);
 }
 
 static inline void remove_empty_places_in_histogram(qpl_histogram& histogram) {
@@ -69,10 +62,9 @@ static inline void remove_empty_places_in_histogram(qpl_histogram& histogram) {
 } // namespace details
 
 template <>
-auto update_histogram<execution_path_t::hardware>(const uint8_t* begin, const uint8_t* end,
-                                                  deflate_histogram& histogram,
-                                                  deflate_level      UNREFERENCED_PARAMETER(level)) noexcept
-        -> qpl_ml_status {
+auto update_histogram<execution_path_t::hardware>(
+        const uint8_t* begin, const uint8_t* end, deflate_histogram& histogram,
+        deflate_level UNREFERENCED_PARAMETER(level)) noexcept -> qpl_ml_status {
     hw_descriptor HW_PATH_ALIGN_STRUCTURE                         descriptor;
     HW_PATH_VOLATILE hw_completion_record HW_PATH_ALIGN_STRUCTURE completion_record;
     qpl_histogram                                                 hw_histogram;
@@ -104,8 +96,8 @@ auto update_histogram<execution_path_t::hardware>(const uint8_t* begin, const ui
 
 template <>
 auto update_histogram<execution_path_t::software>(const uint8_t* begin, const uint8_t* end,
-                                                  deflate_histogram& histogram, deflate_level level) noexcept
-        -> qpl_ml_status {
+                                                  deflate_histogram& histogram,
+                                                  deflate_level      level) noexcept -> qpl_ml_status {
     using namespace qpl::ml;
 
     static const auto& histogram_reset =
