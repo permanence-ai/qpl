@@ -6,6 +6,8 @@
 
 #include "huffman_only_units.hpp"
 
+#include <algorithm>
+
 #include "bitbuf2.h"
 #include "compression/deflate/containers/huffman_table.hpp"
 #include "igzip_lib.h"
@@ -85,8 +87,8 @@ auto huffman_only_compress_block(huffman_only_state<execution_path_t::software>&
     return status_list::ok;
 }
 
-auto huffman_only_finalize(huffman_only_state<execution_path_t::software>& stream, compression_state_t& state) noexcept
-        -> qpl_ml_status {
+auto huffman_only_finalize(huffman_only_state<execution_path_t::software>& stream,
+                           compression_state_t&                            state) noexcept -> qpl_ml_status {
     auto isal_state = &stream.isal_stream_ptr_->internal_state;
     auto bit_buffer = &isal_state->bitbuf;
 
@@ -175,9 +177,7 @@ auto convert_output_to_big_endian(huffman_only_state<execution_path_t::software>
             reinterpret_cast<uint16_t*>(stream.isal_stream_ptr_->next_out - stream.isal_stream_ptr_->total_out);
 
     // Main cycle
-    for (uint32_t i = 0; i < actual_length; i++) {
-        array_ptr[i] = reverse_bits(array_ptr[i], 16);
-    }
+    std::transform(array_ptr, array_ptr + actual_length, array_ptr, [](auto x) { return reverse_bits(x, 16); });
 
     // Check if the last byte should be bit reversed (in case of odd stream length)
     if (stream.isal_stream_ptr_->total_out % 2 == 1) {

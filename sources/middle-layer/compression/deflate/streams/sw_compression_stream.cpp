@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include <algorithm>
+
 #include "deflate_hash_table.h"
 #include "simple_memory_ops.hpp"
 #include "sw_deflate_state.hpp"
@@ -18,8 +20,8 @@ void deflate_state<execution_path_t::software>::set_source(uint8_t* begin, uint3
     source_size_      = size;
 }
 
-auto deflate_state<execution_path_t::software>::write_bytes(const uint8_t* data, uint32_t size) noexcept
-        -> qpl_ml_status {
+auto deflate_state<execution_path_t::software>::write_bytes(const uint8_t* data,
+                                                            uint32_t       size) noexcept -> qpl_ml_status {
     if (isal_stream_ptr_->avail_out < size) { return status_list::more_output_needed; }
 
     core_sw::util::copy(data, data + size, isal_stream_ptr_->next_out);
@@ -68,9 +70,7 @@ void deflate_state<execution_path_t::software>::reset_match_history() noexcept {
         if ((isal_stream_ptr_->total_in & 0xFFFF) == 0) {
             memset(hash_table, 0, hash_table_size);
         } else {
-            for (uint32_t i = 0; i < hash_table_size / 2; i++) {
-                hash_table[i] = static_cast<uint16_t>(isal_stream_ptr_->total_in);
-            }
+            std::fill_n(hash_table, hash_table_size / 2, static_cast<uint16_t>(isal_stream_ptr_->total_in));
         }
     }
 }
@@ -131,8 +131,8 @@ auto deflate_state<execution_path_t::software>::init_level_buffer() noexcept -> 
     return start_new_block_ || is_first_chunk();
 }
 
-[[nodiscard]] auto deflate_state<execution_path_t::software>::compression_level() const noexcept
-        -> compression_level_t {
+[[nodiscard]] auto
+deflate_state<execution_path_t::software>::compression_level() const noexcept -> compression_level_t {
     return level_;
 }
 
@@ -142,13 +142,13 @@ auto deflate_state<execution_path_t::software>::init_level_buffer() noexcept -> 
     return (!isal_stream_ptr_->avail_in && level_buffer->hash_map.matches_next >= level_buffer->hash_map.matches_end);
 }
 
-[[nodiscard]] auto deflate_state<execution_path_t::software>::mini_blocks_support() const noexcept
-        -> mini_blocks_support_t {
+[[nodiscard]] auto
+deflate_state<execution_path_t::software>::mini_blocks_support() const noexcept -> mini_blocks_support_t {
     return mini_block_size_ != mini_block_size_none ? mini_blocks_support_t::enabled : mini_blocks_support_t::disabled;
 }
 
-[[nodiscard]] auto deflate_state<execution_path_t::software>::dictionary_support() const noexcept
-        -> dictionary_support_t {
+[[nodiscard]] auto
+deflate_state<execution_path_t::software>::dictionary_support() const noexcept -> dictionary_support_t {
     return dictionary_support_;
 }
 
