@@ -64,9 +64,9 @@ struct own_huffman_code {
  * and compatible in compression and decompression tables in order to
  * convert compression table to decompression one.
 */
-static inline auto validate_representation_flags(const compression_huffman_table& compression_table,
-                                                 decompression_huffman_table&     decompression_table) noexcept
-        -> qpl_ml_status {
+static inline auto
+validate_representation_flags(const compression_huffman_table& compression_table,
+                              decompression_huffman_table&     decompression_table) noexcept -> qpl_ml_status {
     if (decompression_table.is_deflate_header_used() && !compression_table.is_deflate_header_used()) {
         return status_list::status_invalid_params;
     }
@@ -146,20 +146,15 @@ static inline void create_packed_offset_table(uint32_t* const packed_table_ptr, 
 
 static inline void fill_histogram(const uint32_t* literals_lengths_histogram_ptr,
                                   const uint32_t* distances_histogram_ptr, isal_huff_histogram* histogram) {
-    for (uint32_t i = 0U; i < QPLC_DEFLATE_LL_TABLE_SIZE; i++) {
-        histogram->lit_len_histogram[i] = static_cast<uint32_t>(literals_lengths_histogram_ptr[i]);
-    }
+    std::copy_n(literals_lengths_histogram_ptr, QPLC_DEFLATE_LL_TABLE_SIZE, histogram->lit_len_histogram);
 
-    for (uint32_t i = 0U; i < QPLC_DEFLATE_D_TABLE_SIZE; i++) {
-        histogram->dist_histogram[i] = static_cast<uint32_t>(distances_histogram_ptr[i]);
-    }
+    std::copy_n(distances_histogram_ptr, QPLC_DEFLATE_D_TABLE_SIZE, histogram->dist_histogram);
 }
 
 static inline void fill_histogram_literals_only(const uint32_t*      literals_lengths_histogram_ptr,
                                                 isal_huff_histogram* histogram) {
-    for (uint32_t i = 0U; i < QPLC_LITERALS_COUNT; i++) {
-        histogram->lit_len_histogram[i] = static_cast<uint32_t>(literals_lengths_histogram_ptr[i]);
-    }
+    std::copy(literals_lengths_histogram_ptr, literals_lengths_histogram_ptr + QPLC_LITERALS_COUNT,
+              histogram->lit_len_histogram);
 }
 
 static inline void store_isal_deflate_header(isal_hufftables*           isal_huffman_table,
@@ -232,18 +227,15 @@ static inline void qpl_huffman_table_to_isal(const qpl_compression_huffman_table
 
     uint8_t* deflate_header_ptr = get_deflate_header_ptr(table_ptr);
 
-    for (uint32_t i = 0; i < header_byte_size; i++) {
-        isal_table_ptr->deflate_hdr[i] = deflate_header_ptr[i];
-    }
+    std::copy_n(deflate_header_ptr, header_byte_size, isal_table_ptr->deflate_hdr);
 
     // Forcedly set final bit of header, ISA-L will reset it if current block not final
     isal_table_ptr->deflate_hdr[0] |= 1U;
 }
 
-static inline auto initialize_inflate_state_from_deflate_header(uint8_t*            deflate_header_data_ptr,
-                                                                uint32_t            deflate_header_bit_size,
-                                                                isal_inflate_state* isal_state_ptr) noexcept
-        -> qpl_ml_status {
+static inline auto
+initialize_inflate_state_from_deflate_header(uint8_t* deflate_header_data_ptr, uint32_t deflate_header_bit_size,
+                                             isal_inflate_state* isal_state_ptr) noexcept -> qpl_ml_status {
     // Prepare inflate state to parse Deflate header
     constexpr auto end_processing_condition = end_processing_condition_t::stop_and_check_for_bfinal_eob;
 
@@ -271,9 +263,9 @@ static inline auto initialize_inflate_state_from_deflate_header(uint8_t*        
     return status;
 }
 
-static inline auto triplets_to_sw_compression_table(const qpl_triplet* triplets_ptr, std::size_t triplets_count,
-                                                    qplc_huffman_table_default_format* compression_table)
-        -> qpl_ml_status {
+static inline auto
+triplets_to_sw_compression_table(const qpl_triplet* triplets_ptr, std::size_t triplets_count,
+                                 qplc_huffman_table_default_format* compression_table) -> qpl_ml_status {
     for (std::size_t i = 0; i < triplets_count; i++) {
         const qpl_triplet current_triplet = triplets_ptr[i];
 
@@ -471,9 +463,9 @@ static inline auto build_compression_table(const uint32_t*            literals_l
     return status_list::ok;
 }
 
-static inline auto comp_to_decompression_table(const compression_huffman_table& compression_table,
-                                               decompression_huffman_table&     decompression_table) noexcept
-        -> qpl_ml_status {
+static inline auto
+comp_to_decompression_table(const compression_huffman_table& compression_table,
+                            decompression_huffman_table&     decompression_table) noexcept -> qpl_ml_status {
     auto validation_status = details::validate_representation_flags(compression_table, decompression_table);
 
     if (status_list::ok != validation_status) { return validation_status; }
@@ -582,9 +574,9 @@ static inline auto comp_to_decompression_table(const compression_huffman_table& 
     return status_list::ok;
 }
 
-static inline auto init_compression_table_with_stream(const uint8_t* const      buffer,
-                                                      compression_huffman_table compression_table) noexcept
-        -> qpl_ml_status {
+static inline auto
+init_compression_table_with_stream(const uint8_t* const      buffer,
+                                   compression_huffman_table compression_table) noexcept -> qpl_ml_status {
     using namespace qpl::ml::serialization;
 
     uint8_t* src = const_cast<uint8_t*>(buffer); // adding an offset internally
@@ -600,9 +592,9 @@ static inline auto init_compression_table_with_stream(const uint8_t* const      
     return status_list::ok;
 }
 
-static inline auto init_decompression_table_with_stream(const uint8_t* const        buffer,
-                                                        decompression_huffman_table decompression_table) noexcept
-        -> qpl_ml_status {
+static inline auto
+init_decompression_table_with_stream(const uint8_t* const        buffer,
+                                     decompression_huffman_table decompression_table) noexcept -> qpl_ml_status {
     using namespace qpl::ml::serialization;
 
     uint8_t* src = const_cast<uint8_t*>(buffer); // adding an offset internally
@@ -618,9 +610,9 @@ static inline auto init_decompression_table_with_stream(const uint8_t* const    
     return status_list::ok;
 }
 
-static inline auto write_compression_table_to_stream(uint8_t* const            buffer,
-                                                     compression_huffman_table compression_table) noexcept
-        -> qpl_ml_status {
+static inline auto
+write_compression_table_to_stream(uint8_t* const            buffer,
+                                  compression_huffman_table compression_table) noexcept -> qpl_ml_status {
     using namespace qpl::ml::serialization;
 
     uint8_t* dst = buffer; // adding an offset internally
@@ -636,9 +628,9 @@ static inline auto write_compression_table_to_stream(uint8_t* const            b
     return status_list::ok;
 }
 
-static inline auto write_decompression_table_to_stream(uint8_t* const              buffer,
-                                                       decompression_huffman_table decompression_table) noexcept
-        -> qpl_ml_status {
+static inline auto
+write_decompression_table_to_stream(uint8_t* const              buffer,
+                                    decompression_huffman_table decompression_table) noexcept -> qpl_ml_status {
     using namespace qpl::ml::serialization;
 
     uint8_t* dst = buffer; // adding an offset internally
@@ -759,8 +751,8 @@ auto huffman_table_init(compression_huffman_table& table, const qpl_triplet* con
 
 template <>
 auto huffman_table_init(decompression_huffman_table& table, const qpl_triplet* const triplets_ptr,
-                        const std::size_t triplets_count, const uint32_t representation_flags) noexcept
-        -> qpl_ml_status {
+                        const std::size_t triplets_count,
+                        const uint32_t    representation_flags) noexcept -> qpl_ml_status {
 
     qplc_huffman_table_flat_format* decompression_table_ptr = table.get_sw_decompression_table();
 
@@ -794,8 +786,8 @@ auto huffman_table_init(decompression_huffman_table& table, const qpl_triplet* c
 
 template <>
 auto huffman_table_init(qpl_compression_huffman_table& table, const qpl_triplet* const triplets_ptr,
-                        const std::size_t triplets_count, const uint32_t representation_flags) noexcept
-        -> qpl_ml_status {
+                        const std::size_t triplets_count,
+                        const uint32_t    representation_flags) noexcept -> qpl_ml_status {
     using namespace qpl::ml::compression;
 
     auto sw_compression_table_data_ptr   = reinterpret_cast<uint8_t*>(&table.sw_compression_table_data);
@@ -825,8 +817,8 @@ auto huffman_table_init(qpl_compression_huffman_table& table, const qpl_triplet*
 
 template <>
 auto huffman_table_init(qpl_decompression_huffman_table& table, const qpl_triplet* const triplets_ptr,
-                        const std::size_t triplets_count, const uint32_t representation_flags) noexcept
-        -> qpl_ml_status {
+                        const std::size_t triplets_count,
+                        const uint32_t    representation_flags) noexcept -> qpl_ml_status {
     using namespace qpl::ml::compression;
 
     auto sw_flattened_table_ptr     = reinterpret_cast<uint8_t*>(&table.sw_flattened_table);
@@ -871,8 +863,8 @@ auto huffman_table_init(decompression_huffman_table& UNREFERENCED_PARAMETER(tabl
 
 template <>
 auto huffman_table_init(qpl_compression_huffman_table& table, const uint32_t* literals_lengths_histogram_ptr,
-                        const uint32_t* distances_histogram_ptr, const uint32_t representation_flags) noexcept
-        -> qpl_ml_status {
+                        const uint32_t* distances_histogram_ptr,
+                        const uint32_t  representation_flags) noexcept -> qpl_ml_status {
     using namespace qpl::ml;
     using namespace qpl::ml::compression;
 
