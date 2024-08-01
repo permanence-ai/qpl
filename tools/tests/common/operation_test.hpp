@@ -1,3 +1,4 @@
+#include <memory>
 /*******************************************************************************
  * Copyright (C) 2022 Intel Corporation
  *
@@ -88,18 +89,15 @@ protected:
 
         const uint32_t job_size = sizeof(qpl_job);
 
-        m_reference_job_buffer = new uint8_t[job_size];
-        memset(m_reference_job_buffer, 0U, job_size);
-        reference_job_ptr = reinterpret_cast<qpl_job*>(m_reference_job_buffer);
+        m_reference_job_buffer = std::make_unique<uint8_t[]>(job_size);
+        memset(m_reference_job_buffer.get(), 0U, job_size);
+        reference_job_ptr = reinterpret_cast<qpl_job*>(m_reference_job_buffer.get());
     }
 
     /**
         * @briеf Deallocates qpl_job structure for reference
         */
-    void TearDown() override {
-        JobFixture::TearDown();
-        delete[] m_reference_job_buffer;
-    }
+    void TearDown() override { JobFixture::TearDown(); }
 
     /**
         * @briеf Compares total_in and total_out fields for main and reference job
@@ -129,7 +127,7 @@ protected:
     std::vector<uint8_t> reference_destination;
 
 private:
-    uint8_t* m_reference_job_buffer;
+    std::unique_ptr<uint8_t[]> m_reference_job_buffer;
 };
 
 #define QPL_FIXTURE_TEST(test_suite, test_name, fixture) \
